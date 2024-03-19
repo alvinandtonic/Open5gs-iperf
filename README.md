@@ -7,4 +7,4 @@ This profile creates and registers a changeable number of UEs. There is a script
 <br />The webui server of open5gs can be accesed on the node running Open5Gs. For more information visit [Open5gs:webUI](https://www.sharetechnote.com/html/OpenRAN/OR_open5gs_webui.html)
 <br /><br />Use following command to access webui on remote server
 <br />
-ssh -L 9090:localhost:9999 {powder user-name}@pc{machine number}.emulab.net
+ssh -L 9090:localhost:9999 {powder user-name}@pc{machine-number}.emulab.net
