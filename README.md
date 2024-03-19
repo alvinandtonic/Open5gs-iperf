@@ -1,4 +1,4 @@
-# Open5Gs ft. UERANSIM
+# Open5Gs ft. Iperf
 
 This is a [POWDER](https://powderwireless.net/) profile that automatically instantiates a full simulated 5g core network and UE RAN. It uses [Open5GS](https://github.com/open5gs/open5gs) for the 5c core, spread across n physical nodes, and uses [UERANSIM](https://github.com/aligungr/UERANSIM) v3.1.1 to simulate a gNB and UE devices.
 
