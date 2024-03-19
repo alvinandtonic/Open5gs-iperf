@@ -5,6 +5,7 @@
 # Any subsequent(*) commands which fail will cause the shell script to exit immediately
 set -e
 
+
 # load config values
 source /local/repository/scripts/setup-config
 
@@ -16,7 +17,7 @@ echo "1. Install the UERANSIM dependencies."
 cd ~
 sudo apt -y --force-yes update 
 DEBIAN_FRONTEND=noninteractive sudo apt -y --force-yes -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
-sudo apt -y --force-yes install make g++ openjdk-11-jdk maven libsctp-dev lksctp-tools snapd
+sudo apt -y --force-yes install make g++ openjdk-11-jdk maven libsctp-dev lksctp-tools snapd iperf3
 sudo apt install make gcc g++ libsctp-dev lksctp-tools iproute2 git
 
 sudo snap install cmake --classic
