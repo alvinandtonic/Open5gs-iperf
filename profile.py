@@ -64,7 +64,7 @@ request = pc.makeRequestRSpec()
 
 # Optional physical type for all nodes.
 pc.defineParameter("phystype",  "Optional physical node type",
-                   portal.ParameterType.STRING, "d430",
+                   portal.ParameterType.STRING, "d740",
                    longDescription="Specify a physical node type (d430,d740,pc3000,d710,etc) " +
                    "instead of letting the resource mapper choose for you.")
 
