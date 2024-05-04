@@ -36,7 +36,7 @@ There is a script at `/local/repository/scripts/connect-all-ues.sh` that can be 
 class GLOBALS(object):
     SITE_URN = "urn:publicid:IDN+emulab.net+authority+cm"
     # Use kernel version required by free5gc: Ubuntu 18, kernel 5.0.0-23-generic
-    UBUNTU18_IMG = "urn:publicid:IDN+emulab.net+image+reu2020:ubuntu1864std50023generic"
+    UBUNTU18_IMG = "urn:publicid:IDN+wisc.cloudlab.us+image+uwmadison744-s24-PG0:marius-ubuntu22"
     # default type
     HWTYPE = "d430"
     SCRIPT_DIR = "/local/repository/scripts/"
