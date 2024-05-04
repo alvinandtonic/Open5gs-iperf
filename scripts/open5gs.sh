@@ -50,7 +50,7 @@ sudo systemctl enable mongod
 #installing Open5gs
 sudo add-apt-repository ppa:open5gs/latest
 sudo apt update
-sudo apt install open5gs
+sudo apt install -y open5gs
 
 #installing NodeJS for webUI
 
