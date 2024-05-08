@@ -206,7 +206,7 @@ class NAT(app_manager.RyuApp):
                     port = ports.pop()
                     maps[ip_addr] = port
                     maps[port] = ip_addr
-                print 'Created Mapping: %s %s to %s %s' % (ip_addr,
+                print 'Created Mapping: {} {} to {} {}'.format(ip_addr,
                         ip_addr.port, ex_ip, port)
                 actions = \
                     [parser.OFPActionSetNwSrc(self.ipv4_to_int(ex_ip)),
