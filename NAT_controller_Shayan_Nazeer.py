@@ -1,6 +1,6 @@
 # The code is this file is derived from:
 # https://raw.githubusercontent.com/osrg/ryu/master/ryu/app/simple_switch.py
-# which is protected by the Apache 2.0 license.
+# which is protected by the Apache 2.0 license.  
 # The modifications are protected by the GENI license.
 # Both licenses are included below.
 #
@@ -54,180 +54,164 @@ from ryu.ofproto import ofproto_v1_0
 from ryu.lib.packet import packet
 from ryu.lib.packet import ipv4
 from ryu.lib.packet import tcp
-from ryu.lib.packet import udp
+from ryu.lib.packet import udp 
 from ryu.lib.packet import icmp
 from ryu.controller import dpset
 from netaddr import *
 from collections import namedtuple
 
-
 class NAT(app_manager.RyuApp):
     OFP_VERSIONS = [ofproto_v1_0.OFP_VERSION]
-    global Ipv4_addr
-    Ipv4_addr = namedtuple("Ipv4_addr", ["addr", "port"])
+    global Ipv4_addr 
+    Ipv4_addr = namedtuple("Ipv4_addr", ["addr", "port"])    
 
     def __init__(self, *args, **kwargs):
         super(NAT, self).__init__(*args, **kwargs)
-        global ex_ip
-        ex_ip = "128.128.129.1"
-        global maps
-        maps = {}
-        global ports
-        ports = range(50000, 60000)
-
+	global ex_ip
+	ex_ip = "128.128.129.1"
+	global maps
+	maps = {}
+	global ports
+	ports = range(5000,60000)
     def add_flow(self, datapath, match, actions, priority=0, hard_timeout=0):
-        ofproto = datapath.ofproto
-        parser = datapath.ofproto_parser
+	ofproto = datapath.ofproto
+	parser = datapath.ofproto_parser
 
-        mod = parser.OFPFlowMod(datapath=datapath, priority=priority, match=match,
-                                actions=actions, hard_timeout=hard_timeout, cookie=0, command=ofproto.OFPFC_ADD)
-        datapath.send_msg(mod)
-        # self.logger.debug("add_flow:"+str(mod))
+	mod = parser.OFPFlowMod(datapath=datapath, priority=priority, match=match, actions=actions, hard_timeout=hard_timeout, cookie=0, command=ofproto.OFPFC_ADD)
+	datapath.send_msg(mod)
+	self.logger.debug("add_flow:"+str(mod))
 
     @set_ev_cls(dpset.EventDP, dpset.DPSET_EV_DISPATCHER)
     def _event_switch_enter_handler(self, ev):
         dl_type_arp = 0x0806
-        dl_type_ipv4 = 0x0800
-        dl_type_ipv6 = 0x86dd
-        dp = ev.dp
-        ofproto = dp.ofproto
+	dl_type_ipv4 = 0x0800
+	dl_type_ipv6 = 0x86dd
+	dp = ev.dp
+	ofproto = dp.ofproto
         parser = dp.ofproto_parser
-        self.logger.info("switch connected %s", dp)
+	self.logger.info("switch connected %s", dp)
+	
+	# pass packet directly
+	actions = [parser.OFPActionOutput(ofproto.OFPP_NORMAL)]	
 
-        # pass packet directly
-        actions = [parser.OFPActionOutput(ofproto.OFPP_NORMAL)]
+	# arp
+	match = parser.OFPMatch(dl_type = dl_type_arp)
 
-        # arp
-        match = parser.OFPMatch(dl_type=dl_type_arp)
+	self.add_flow(dp, match, actions)
+	
+	# ipv6
+	match = parser.OFPMatch(dl_type = dl_type_ipv6)
 
-        self.add_flow(dp, match, actions)
+	self.add_flow(dp, match, actions)
 
-        # ipv6
-        match = parser.OFPMatch(dl_type=dl_type_ipv6)
+	# igmp
+	match = parser.OFPMatch(dl_type = dl_type_ipv4, nw_proto = 2)
 
-        self.add_flow(dp, match, actions)
+	self.add_flow(dp, match, actions)
 
-        # igmp
-        match = parser.OFPMatch(dl_type=dl_type_ipv4, nw_proto=2)
+	# do address translation for following types of packet
+	actions = [parser.OFPActionOutput(ofproto.OFPP_CONTROLLER)]
 
-        self.add_flow(dp, match, actions)
+	# icmp
+	match = parser.OFPMatch(dl_type = dl_type_ipv4, nw_proto = 1)
 
-        # do address translation for following types of packet
-        actions = [parser.OFPActionOutput(ofproto.OFPP_CONTROLLER)]
+	self.add_flow(dp, match, actions)
 
-        # icmp
-        match = parser.OFPMatch(dl_type=dl_type_ipv4, nw_proto=1)
+	# tcp
+	match = parser.OFPMatch(dl_type = dl_type_ipv4, nw_proto = 6)
 
-        self.add_flow(dp, match, actions)
+	self.add_flow(dp, match, actions)
 
-        # tcp
-        match = parser.OFPMatch(dl_type=dl_type_ipv4, nw_proto=6)
+	# udp
+	match = parser.OFPMatch(dl_type = dl_type_ipv4, nw_proto = 17)
 
-        self.add_flow(dp, match, actions)
-
-        # udp
-        match = parser.OFPMatch(dl_type=dl_type_ipv4, nw_proto=17)
-
-        self.add_flow(dp, match, actions)
+	self.add_flow(dp, match, actions)
 
     @set_ev_cls(ofp_event.EventOFPPacketIn, MAIN_DISPATCHER)
     def _packet_in_handler(self, ev):
-        # self.logger.info("msg in")
+	self.logger.info("msg in")
 
-        message = ev.msg
-        # self.logger.info("message %s", message)
+	message = ev.msg
+	self.logger.info("message %s", message)
         datapath = message.datapath
         ofproto = datapath.ofproto
-        parser = datapath.ofproto_parser
+	parser = datapath.ofproto_parser
 
         pkt = packet.Packet(message.data)
-        # self.logger.info("pkt %s", pkt)
-        ip = pkt.get_protocol(ipv4.ipv4)
-        # self.logger.info("ipv4 %s", ip)
+	#self.logger.info("pkt %s", pkt)
+	ip = pkt.get_protocol(ipv4.ipv4)
+        #self.logger.info("ipv4 %s", ip)
+	
 
-        bitmask = "24"
-        src_match = IPNetwork("192.168.0.0" + "/" + bitmask)
-        dst_match = ex_ip
+	bitmask = "24"
+	src_match = IPNetwork("192.168.0.0"+ "/" + bitmask)
+	dst_match = ex_ip
 
-        if message.in_port == ofproto.OFPP_LOCAL:
-            out_port = 1
-        else:
-            out_port = ofproto.OFPP_LOCAL
+	if message.in_port == ofproto.OFPP_LOCAL :
+		out_port = 1
+	else :
+		out_port = ofproto.OFPP_LOCAL
+	
+	#TCP/UDP
+	if ip.proto == 17 or ip.proto == 6 :
+		t = pkt.get_protocol(tcp.tcp)
+        	self.logger.info("tcp %s", t)
+        	u = pkt.get_protocol(udp.udp)
+        	#self.logger.info("udp %s", u)
 
-        if ip.proto == 17 or ip.proto == 6:
-            t = pkt.get_protocol(tcp.tcp)
-            # self.logger.info("tcp %s", t)
-            u = pkt.get_protocol(udp.udp)
-            # self.logger.info("udp %s", u)
+		    #Route TCP and UDP packets from client here
+		if IPNetwork( ip.src + "/" + bitmask ) == src_match :
+			src_port = t.src_port if t else u.src_port
+			ip_addr = Ipv4_addr(addr=ip.src , port=src_port)
+			
+			# Map Client Source Address and Port to External IP and Port
+			if ip_addr in maps :
+                    		port = maps[ip_addr]
+			else:
+				port = ports.pop()
+                    		maps[ip_addr] = port
+                    		maps[port] = ip_addr
+			print "Created Mapping: %s %s to %s %s" % (ip_addr, ip_addr.port, ex_ip, port )
+			actions =[parser.OFPActionSetNwSrc(self.ipv4_to_int(ex_ip)),parser.OFPActionSetTpSrc(port),parser.OFPActionOutput(out_port)]
 
-            # Route TCP and UDP packets from client here
-            if IPNetwork(ip.src + "/" + bitmask) == src_match:
-                # Determine the source port based on the presence of TCP or UDP segments in the packet
-                src_port = t.src_port if t else u.src_port  # t is TCP segment, u is UDP segment
-                # Attempt to find a mapping for the client's source IP address and port
-                if ip_addr in maps:
-                        # If mapping exists, retrieve the associated external port
-                        port = maps[ip_addr]
-				else:
-					# If no mapping exists, allocate a new external port from the available pool
-					port = ports.pop()
-					# Create new entries in the mapping dictionary for bidirectional lookup
-					# Map internal IP and port to external port
-					maps[ip_addr] = port
-					# Map external port back to internal IP and port
-					maps[port] = ip_addr
+			out = parser.OFPPacketOut(datapath=datapath, buffer_id=message.buffer_id, data=message.data, in_port=message.in_port,actions=actions)
+        		datapath.send_msg(out)
+			print "Packet Sent"
+			return
+		elif ip.dst  == dst_match :
+			#print "convert dst"
+                        dst_port = t.dst_port if t else u.dst_port
+                        print "dst_port: %s" % dst_port
+			
+			 #Route TCP and UDP packets that return from server here
+                        if dst_port in maps :
+                    		ip_addr = maps[dst_port]
+                    		print "dst port: %s" % dst_port
+                	else :
+                    		print "Dropping msg as dst is not understood"
+                    		return
+                	actions = [parser.OFPActionSetNwDst( self.ipv4_to_int(ip_addr.addr) ),parser.OFPActionSetTpDst(ip_addr.port ),parser.OFPActionOutput(out_port)]
+			out = parser.OFPPacketOut(datapath=datapath, buffer_id=message.buffer_id, data=message.data, in_port=message.in_port,actions=actions)
+                        datapath.send_msg(out)
+			print "Packet Sent"
+                        return
 
-                    # Log the creation of the mapping
-                    print("Created Mapping: {} {} to {} {}".format(
-                        ip_addr, ip_addr.port, ex_ip, port))
-
-                    # Define actions for modifying the packet via OpenFlow
-                    # Set the network source to the external IP
-                    actions = [
-                        parser.OFPActionSetNwSrc(self.ipv4_to_int(ex_ip)),
-                        # Set the transport layer source port
-                        parser.OFPActionSetTpSrc(port),
-                        # Specify the output port for the packet
-                        parser.OFPActionOutput(out_port)
-                    ]
-
-            out = parser.OFPPacketOut(datapath=datapath, buffer_id=message.buffer_id, data=message.data, in_port=message.in_port, actions=actions)
-            datapath.send_msg(out)
-            return
-
-            elif ip.dst == dst_match:
-                # print "convert dst"
-                dst_port = t.dst_port if t else u.dst_port
-                # print dst_port
-
-                # Route TCP and UDP packets that return from server here
-				if dst_port in maps:
-                    ip_addr = maps[dst_port]
-                    print "dst port: %s" % dst_port
-                else:
-                    print "Dropping msg as dst is not understood"
-                    return
-                actions = [parser.OFPActionSetNwDst(self.ipv4_to_int(
-                    ip_addr.addr)), parser.OFPActionSetTpDst(ip_addr.port), parser.OFPActionOutput(out_port)]
-                out = parser.OFPPacketOut(datapath=datapath, buffer_id=message.buffer_id, data=message.data, in_port=message.in_port, actions=actions)
-                datapath.send_msg(out)
-                return
-
-        else:
-            # print "other"
-            actions = [parser.OFPActionOutput(out_port)]
-            out = parser.OFPPacketOut(datapath=datapath, buffer_id=message.buffer_id, data=message.data, in_port=message.in_port, actions=actions)
-            datapath.send_msg(out)
+	
+	else:
+		#print "other"
+		actions = [parser.OFPActionOutput(out_port)]
+                out = parser.OFPPacketOut(datapath=datapath, buffer_id=message.buffer_id, data=message.data, in_port=message.in_port,actions=actions)
+                datapath.send_msg(out)		
 
     def ipv4_to_str(self, integre):
-        ip_list = [str((integre >> (24 - (n * 8)) & 255)) for n in range(4)]
+	ip_list = [str((integre >> (24 - (n * 8)) & 255)) for n in range(4)]
         return '.'.join(ip_list)
 
     def ipv4_to_int(self, string):
-        ip = string.split('.')
-        assert len(ip) == 4
-        i = 0
-        for b in ip:
-            b = int(b)
-            i = (i << 8) | b
+       	ip = string.split('.')
+       	assert len(ip) == 4
+       	i = 0
+       	for b in ip:
+    		b = int(b)
+        	i = (i << 8) | b
         return i
