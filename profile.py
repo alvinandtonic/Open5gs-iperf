@@ -39,7 +39,7 @@ class GLOBALS(object):
     UBUNTU22_IMG = "urn:publicid:IDN+utah.cloudlab.us+image+insaneproject-PG0:Ubuntu22.04-DPDK22.11"
 
     # default type
-    HWTYPE = "d710"
+    HWTYPE = "d430"
     SCRIPT_DIR = "/local/repository/scripts/"
     SCRIPT_CONFIG = "setup-config"
 
@@ -65,7 +65,7 @@ request = pc.makeRequestRSpec()
 
 # Optional physical type for all nodes.
 pc.defineParameter("phystype",  "Optional physical node type",
-                   portal.ParameterType.STRING, "d710",
+                   portal.ParameterType.STRING, "d430",
                    longDescription="Specify a physical node type (d430,d740,pc3000,d710,etc) " +
                    "instead of letting the resource mapper choose for you.")
 
@@ -87,7 +87,7 @@ gNBCoreLink = request.Link("gNBCoreLink")
 # Add node which will run gNodeB and UE components with a simulated RAN.
 sim_ran = request.RawPC("sim-ran")
 sim_ran.component_manager_id = GLOBALS.SITE_URN
-sim_ran.disk_image = GLOBALS.UBUNTU22_IMG
+# sim_ran.disk_image = GLOBALS.UBUNTU22_IMG
 #sim_ran.docker_extimage = "ubuntu:20.04"
 sim_ran.hardware_type = params.phystype 
 sim_ran.addService(rspec.Execute(shell="bash", command=invoke_script_str("ran.sh")))
