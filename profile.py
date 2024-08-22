@@ -21,7 +21,7 @@ To set up the default UE (or UEs, if you changed the parameter) and get internet
 1. Wait until after the startup scripts have finished (in the POWDER experiment list view, the startup column for each node should say 'Finished'). This may take 30+ minutes.
 2. Open up three terminals and ssh into the sim-ran box in all three, then run `sudo su && cd /root/UERANSIM` in each. Because UERANSIM creates tunnel network interfaces for UE PDU sessions, root access is required.
 3. In the first window, run `build/nr-gnb -c config/open5gs-gnb.yaml` to start the gNB. It should log a successful connection to the 5G core.
-4. In the second window, run `build/nr-ue -c config/open5gs-ue.yaml` to connect the simulated UE to the gNB. It should log a successful connection, successful registration with the 5G core, and a PDU session message indicating the device is ready to communicate in the user plane. 
+4. In the second window, run `build/nr-ue -c config/open5gs-ue/ue0.yaml` to connect the simulated UE to the gNB. It should log a successful connection, successful registration with the 5G core, and a PDU session message indicating the device is ready to communicate in the user plane. 
 4. The previous step also creates a new linux interface `uesimtun0`, which you can now use to access the internet through the 5G core. For example, you can run `ping -I uesimtun0 google.com` to see data being sent and received.
 
 Refer to https://open5gs.org/open5gs/docs/guide/01-quickstart/ to learn how to modify the system, such as registering new UE subscribers in the core or modifying 5G network function configuration.
