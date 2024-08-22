@@ -110,6 +110,13 @@ data_net.hardware_type = GLOBALS.HWTYPE if params.phystype != "" else params.phy
 data_net.addService(rspec.Execute(shell="bash", command=invoke_script_str("data_net.sh")))
 gNBCoreLink.addNode(data_net)
 
+# Add new node with the same specifications, named "cta"
+cta = request.RawPC("cta")
+cta.component_manager_id = GLOBALS.SITE_URN
+cta.hardware_type = GLOBALS.HWTYPE if params.phystype != "" else params.phystype
+cta.addService(rspec.Execute(shell="bash", command=invoke_script_str("cta.sh")))
+gNBCoreLink.addNode(cta)
+
 tour = IG.Tour()
 tour.Description(IG.Tour.MARKDOWN, tourDescription)
 tour.Instructions(IG.Tour.MARKDOWN, tourInstructions)
