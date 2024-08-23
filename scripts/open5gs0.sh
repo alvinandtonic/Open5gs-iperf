@@ -109,8 +109,8 @@ cp /local/repository/config/sgwu.yaml /etc/open5gs/sgwu.yaml
 
 echo "Setup 5G Core"
 
-cp /local/repository/config/amf.yaml /etc/open5gs/amf.yaml
-cp /local/repository/config/upf.yaml /etc/open5gs/upf.yaml
+cp /local/repository/config/open0/amf.yaml /etc/open5gs/amf.yaml
+cp /local/repository/config/open0/upf.yaml /etc/open5gs/upf.yaml
 
 sudo systemctl restart open5gs-mmed
 sudo systemctl restart open5gs-sgwud
