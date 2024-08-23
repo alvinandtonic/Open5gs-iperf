@@ -117,7 +117,7 @@ open5gs0.component_manager_id = GLOBALS.SITE_URN
 # open5gs.disk_image = GLOBALS.UBUNTU22_IMG
 #open5gs.docker_extimage = "ubuntu:20.04"
 open5gs0.hardware_type = GLOBALS.HWTYPE if params.phystype != "" else params.phystype
-open5gs0.addService(rspec.Execute(shell="bash", command=invoke_script_str("open5gs.sh")))
+open5gs0.addService(rspec.Execute(shell="bash", command=invoke_script_str("open5gs0.sh")))
 ctalink.addNode(open5gs0)
 
 # Add node that will host the 5G Core Virtual Network Functions (AMF, SMF, UPF, etc).
@@ -126,7 +126,7 @@ open5gs1.component_manager_id = GLOBALS.SITE_URN
 # open5gs.disk_image = GLOBALS.UBUNTU22_IMG
 #open5gs.docker_extimage = "ubuntu:20.04"
 open5gs1.hardware_type = GLOBALS.HWTYPE if params.phystype != "" else params.phystype
-open5gs1.addService(rspec.Execute(shell="bash", command=invoke_script_str("open5gs.sh")))
+open5gs1.addService(rspec.Execute(shell="bash", command=invoke_script_str("open5gs1.sh")))
 ctalink.addNode(open5gs1)
 
 # Add node that will host the 5G Core Virtual Network Functions (AMF, SMF, UPF, etc).
@@ -135,7 +135,7 @@ open5gs2.component_manager_id = GLOBALS.SITE_URN
 # open5gs.disk_image = GLOBALS.UBUNTU22_IMG
 #open5gs.docker_extimage = "ubuntu:20.04"
 open5gs2.hardware_type = GLOBALS.HWTYPE if params.phystype != "" else params.phystype
-open5gs2.addService(rspec.Execute(shell="bash", command=invoke_script_str("open5gs.sh")))
+open5gs2.addService(rspec.Execute(shell="bash", command=invoke_script_str("open5gs2.sh")))
 ctalink.addNode(open5gs2)
 
 # Add node that will host the 5G Core Virtual Network Functions (AMF, SMF, UPF, etc).
@@ -144,7 +144,7 @@ open5gs3.component_manager_id = GLOBALS.SITE_URN
 # open5gs.disk_image = GLOBALS.UBUNTU22_IMG
 #open5gs.docker_extimage = "ubuntu:20.04"
 open5gs3.hardware_type = GLOBALS.HWTYPE if params.phystype != "" else params.phystype
-open5gs3.addService(rspec.Execute(shell="bash", command=invoke_script_str("open5gs.sh")))
+open5gs3.addService(rspec.Execute(shell="bash", command=invoke_script_str("open5gs3.sh")))
 ctalink.addNode(open5gs3)
 
 
