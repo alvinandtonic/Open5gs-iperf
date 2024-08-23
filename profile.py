@@ -83,6 +83,7 @@ pc.verifyParameters()
 
 
 gNBCoreLink = request.Link("gNBCoreLink")
+ctalink = request.Link("ctalink")
 
 # Add node which will run gNodeB and UE components with a simulated RAN.
 sim_ran = request.RawPC("sim-ran")
@@ -93,14 +94,14 @@ sim_ran.hardware_type = params.phystype
 sim_ran.addService(rspec.Execute(shell="bash", command=invoke_script_str("ran.sh")))
 gNBCoreLink.addNode(sim_ran)
 
-# Add node that will host the 5G Core Virtual Network Functions (AMF, SMF, UPF, etc).
-open5gs = request.RawPC("open5gs")
-open5gs.component_manager_id = GLOBALS.SITE_URN
-# open5gs.disk_image = GLOBALS.UBUNTU22_IMG
-#open5gs.docker_extimage = "ubuntu:20.04"
-open5gs.hardware_type = GLOBALS.HWTYPE if params.phystype != "" else params.phystype
-open5gs.addService(rspec.Execute(shell="bash", command=invoke_script_str("open5gs.sh")))
-gNBCoreLink.addNode(open5gs)
+# Add new node with the same specifications, named "cta"
+cta = request.RawPC("cta")
+cta.component_manager_id = GLOBALS.SITE_URN
+cta.hardware_type = GLOBALS.HWTYPE if params.phystype != "" else params.phystype
+cta.addService(rspec.Execute(shell="bash", command=invoke_script_str("cta.sh")))
+gNBCoreLink.addNode(cta)
+ctalink.addNode(cta)
+
 
 # Add node that will host Data Network
 data_net = request.RawPC("Data-Network")
@@ -110,12 +111,42 @@ data_net.hardware_type = GLOBALS.HWTYPE if params.phystype != "" else params.phy
 data_net.addService(rspec.Execute(shell="bash", command=invoke_script_str("data_net.sh")))
 gNBCoreLink.addNode(data_net)
 
-# Add new node with the same specifications, named "cta"
-cta = request.RawPC("cta")
-cta.component_manager_id = GLOBALS.SITE_URN
-cta.hardware_type = GLOBALS.HWTYPE if params.phystype != "" else params.phystype
-cta.addService(rspec.Execute(shell="bash", command=invoke_script_str("cta.sh")))
-gNBCoreLink.addNode(cta)
+# Add node that will host the 5G Core Virtual Network Functions (AMF, SMF, UPF, etc).
+open5gs0 = request.RawPC("open5gs0")
+open5gs0.component_manager_id = GLOBALS.SITE_URN
+# open5gs.disk_image = GLOBALS.UBUNTU22_IMG
+#open5gs.docker_extimage = "ubuntu:20.04"
+open5gs0.hardware_type = GLOBALS.HWTYPE if params.phystype != "" else params.phystype
+open5gs0.addService(rspec.Execute(shell="bash", command=invoke_script_str("open5gs.sh")))
+ctalink.addNode(open5gs0)
+
+# Add node that will host the 5G Core Virtual Network Functions (AMF, SMF, UPF, etc).
+open5gs1 = request.RawPC("open5gs1")
+open5gs1.component_manager_id = GLOBALS.SITE_URN
+# open5gs.disk_image = GLOBALS.UBUNTU22_IMG
+#open5gs.docker_extimage = "ubuntu:20.04"
+open5gs1.hardware_type = GLOBALS.HWTYPE if params.phystype != "" else params.phystype
+open5gs1.addService(rspec.Execute(shell="bash", command=invoke_script_str("open5gs.sh")))
+ctalink.addNode(open5gs1)
+
+# Add node that will host the 5G Core Virtual Network Functions (AMF, SMF, UPF, etc).
+open5gs2 = request.RawPC("open5gs2")
+open5gs2.component_manager_id = GLOBALS.SITE_URN
+# open5gs.disk_image = GLOBALS.UBUNTU22_IMG
+#open5gs.docker_extimage = "ubuntu:20.04"
+open5gs2.hardware_type = GLOBALS.HWTYPE if params.phystype != "" else params.phystype
+open5gs2.addService(rspec.Execute(shell="bash", command=invoke_script_str("open5gs.sh")))
+ctalink.addNode(open5gs2)
+
+# Add node that will host the 5G Core Virtual Network Functions (AMF, SMF, UPF, etc).
+open5gs3 = request.RawPC("open5gs3")
+open5gs3.component_manager_id = GLOBALS.SITE_URN
+# open5gs.disk_image = GLOBALS.UBUNTU22_IMG
+#open5gs.docker_extimage = "ubuntu:20.04"
+open5gs3.hardware_type = GLOBALS.HWTYPE if params.phystype != "" else params.phystype
+open5gs3.addService(rspec.Execute(shell="bash", command=invoke_script_str("open5gs.sh")))
+ctalink.addNode(open5gs3)
+
 
 
 tour = IG.Tour()
