@@ -16,7 +16,7 @@ upf:
 #        - address: 127.0.0.4
   gtpu:
     server:
-      - address: 10.10.1.2
+      - address: 10.10.2.2
   session:
     - subnet: 10.45.0.1/16
     - subnet: 2001:db8:cafe::1/48
