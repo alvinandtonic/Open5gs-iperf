@@ -115,9 +115,7 @@ cta = request.RawPC("cta")
 cta.component_manager_id = GLOBALS.SITE_URN
 cta.hardware_type = GLOBALS.HWTYPE if params.phystype != "" else params.phystype
 cta.addService(rspec.Execute(shell="bash", command=invoke_script_str("cta.sh")))
-iface_cta = cta.addInterface()
-iface_cta.addAddress(rspec.IPv4Address("10.10.1.9", "255.255.255.0"))
-gNBCoreLink.addInterface(iface_cta)
+gNBCoreLink.addNode(cta)
 
 
 tour = IG.Tour()
