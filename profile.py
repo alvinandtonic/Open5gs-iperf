@@ -120,6 +120,7 @@ open5gs0.hardware_type = GLOBALS.HWTYPE if params.phystype != "" else params.phy
 open5gs0.addService(rspec.Execute(shell="bash", command=invoke_script_str("open5gs0.sh")))
 ctalink.addNode(open5gs0)
 
+'''
 # Add node that will host the 5G Core Virtual Network Functions (AMF, SMF, UPF, etc).
 open5gs1 = request.RawPC("open5gs1")
 open5gs1.component_manager_id = GLOBALS.SITE_URN
@@ -146,7 +147,7 @@ open5gs3.component_manager_id = GLOBALS.SITE_URN
 open5gs3.hardware_type = GLOBALS.HWTYPE if params.phystype != "" else params.phystype
 open5gs3.addService(rspec.Execute(shell="bash", command=invoke_script_str("open5gs3.sh")))
 ctalink.addNode(open5gs3)
-
+'''
 
 
 tour = IG.Tour()
